@@ -1,229 +1,131 @@
-#include<stdio.h>
-#include<conio.h>
-#include<stdlib.h>
-void insertatbeg(struct node*head);
-void insertatend(struct node*head);
-void delatbeg(struct node*head);
-void delatend(struct node*head);
-void display(struct node*head);
-void traverse(struct node*head);
- struct node
- {
- int data;
- struct node*next;
- }*head=NULL;
-int main()
+Aim: Implementation of Singly Linked List
+Objective : It is used ti implement stacks and queue which are linked needs throughout
+computer science .To prevent the Collision between the data in the Hash map.we use a singly
+Linked list
+
+Algorithm:
+Define a structure for a singly linked list node (struct Node) with two fields: data and next,
+representing the data stored in the node and a pointer to the next node.
+Implement an insert function that takes the current head of the linked list and data as input. This
+function allocates memory for a new node, assigns the data, and updates the next pointer to
+point to the current head. It returns the new head.
+Implement a deleteNode function that takes the current head and a key as input. It traverses the
+linked list, searching for a node with the specified key. If found, it removes the node from the list
+and frees the memory. It returns the updated head.
+Implement a printList function that takes the head as input and prints the elements of the linked
+list by traversing it.
+Implement a quit function that takes the head as input and frees the memory allocated for the
+entire linked list.
+In the main function, create a menu-driven program using a while loop. It repeatedly prompts
+the user for choices:
+Insert: Takes data as input and calls the insert function to add a node to the linked list.
+Delete: Takes data as input and calls the deleteNode function to remove a node with the
+specified data.
+Print: Calls the printList function to display the linked list.
+Quit: Calls the quit function to free the memory and exits the program.
+Handle invalid choices with appropriate messages.
+
+Code:#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
 {
-int choice;
-clrscr();
+int data;
+struct Node* next;
+};
 
-while(1)
+struct Node* insert(struct Node* head, int data)
 {
+struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+newNode-&gt;data = data;
+newNode-&gt;next = head;
+return newNode;
+}
 
-printf("\n1:INSERT AT BEGINNING \t 2:INSERT AT END \t3:DELETE AT BEGINNING \t4: DELELTE AT END\t5:DISPLAY \t6:TRAVERSE \t7:EXIT\n");
-printf("ENTER THE CHOICE:");
-scanf("%d",&choice);
-
-switch(choice)
+struct Node* deleteNode(struct Node* head, int key)
 {
-case 1:insertatbeg(head);
-break;
-case 2:insertatend(head);
-break;
-case 3:delatbeg(head);
-break;
-case 4:delatend(head);
-break;
-case 5:display(head);
-break;
-case 6:traverse(head);
-break;
-case 7:exit(0);
-break;
-default : printf("INVALID CHOICE");
-break;
+struct Node* current = head;
+struct Node* prev = NULL;
 
-    }
-   }
-  }
- void insertatbeg(struct node*head)
- {
- struct node*newnode;
- newnode=(struct node*)malloc(sizeof(struct node));
- printf("ENTER THE ELEMENT TO ENTER :");
- scanf("%d",&newnode->data);
- head =newnode;
- newnode->next=head;
- }
- void traverse(struct node*head)
- {
-  struct node*temp;
-  int count;
-  temp=head;
-  while(temp!=NULL)
-  {
-  count++;
-  temp=temp->next;
-  }
- printf("NUMBER OF THE NODES IS: %d",count);
- }
- void insertatend(struct node*head)
- {
- struct node*newnode,*temp;
-  newnode=(struct node*)malloc(sizeof(struct node));
- printf("ENTER THE ELEMENT TO ENTER :");
- scanf("%d",&newnode->data);
- temp=head;
-  while(temp->next!=NULL)
-  {
-  temp=temp->next;
-  }
-  temp->next=newnode;
-  newnode->next=NULL;
-  return head;
+if (current != NULL &amp;&amp; current-&gt;data == key) {
+head = current-&gt;next;
+free(current);
+return head;
+}
 
- }
- void delatend(struct node*head)
- {
- struct node*temp,*prev;
- temp=head;
-  while(temp->next!=NULL)
-  {
-  prev=temp;
-  temp=temp->next;
-  }
-  prev->next=NULL;
-  free(temp);
-  }
- void delatbeg(struct node*head)
- {
- struct node*temp;
- temp=head;
- head=temp->next;
- free(temp);
- }
- void display(struct node *head)
- {
- struct node *ptr;
- ptr=head;
- while(ptr->next!=NULL){
- printf("%d ",ptr->data);
- ptr=ptr->next;
- }
- printf("%d ",ptr->data);
- }
+while (current != NULL &amp;&amp; current-&gt;data != key) {
+prev = current;
+current = current-&gt;next;
+}
 
-#include<stdio.h>
-#include<conio.h>
-#include<stdlib.h>
-void insertatbeg(struct node*head);
-void insertatend(struct node*head);
-void delatbeg(struct node*head);
-void delatend(struct node*head);
-void display(struct node*head);
-void traverse(struct node*head);
- struct node
- {
- int data;
- struct node*next;
- }*head=NULL;
-int main()
-{
-int choice;
-clrscr();
+if (current == NULL) {
+printf(&quot;Key not found in the linked list.\n&quot;);
+return head;
+}
 
-while(1)
-{
+prev-&gt;next = current-&gt;next;
+free(current);
 
-printf("\n1:INSERT AT BEGINNING \t 2:INSERT AT END \t3:DELETE AT BEGINNING \t4: DELELTE AT END\t5:DISPLAY \t6:TRAVERSE \t7:EXIT\n");
-printf("ENTER THE CHOICE:");
-scanf("%d",&choice);
+return head;
+}
 
-switch(choice)
-{
-case 1:insertatbeg(head);
+void printList(struct Node* head) {
+struct Node* current = head;
+printf(&quot;Linked List: &quot;);
+while (current != NULL) {
+printf(&quot;%d -&gt; &quot;, current-&gt;data);
+current = current-&gt;next;
+}
+printf(&quot;NULL\n&quot;);
+}
+void quit(struct Node* head) {
+struct Node* current = head;
+while (current != NULL) {
+struct Node* temp = current;
+current = current-&gt;next;
+free(temp);
+}
+}
+int main() {
+struct Node* head = NULL;
+int choice, data;
+while (1) {
+printf(&quot;\nLinked List Operations\n&quot;);
+printf(&quot;1. Insert\n&quot;);
+printf(&quot;2. Delete\n&quot;);
+printf(&quot;3. Print\n&quot;);
+//printf(&quot;4. Quiet\n&quot;);
+printf(&quot;Enter your choice: &quot;);
+scanf(&quot;%d&quot;, &amp;choice);
+switch (choice) {
+case 1:
+printf(&quot;Enter data to insert: &quot;);
+scanf(&quot;%d&quot;, &amp;data);
+head = insert(head, data);
 break;
-case 2:insertatend(head);
-break;
-case 3:delatbeg(head);
-break;
-case 4:delatend(head);
-break;
-case 5:display(head);
-break;
-case 6:traverse(head);
-break;
-case 7:exit(0);
-break;
-default : printf("INVALID CHOICE");
-break;
+case 2:
+printf(&quot;Enter data to delete: &quot;);
 
-    }
-   }
-  }
- void insertatbeg(struct node*head)
- {
- struct node*newnode;
- newnode=(struct node*)malloc(sizeof(struct node));
- printf("ENTER THE ELEMENT TO ENTER :");
- scanf("%d",&newnode->data);
- head =newnode;
- newnode->next=head;
- }
- void traverse(struct node*head)
- {
-  struct node*temp;
-  int count;
-  temp=head;
-  while(temp!=NULL)
-  {
-  count++;
-  temp=temp->next;
-  }
- printf("NUMBER OF THE NODES IS: %d",count);
- }
- void insertatend(struct node*head)
- {
- struct node*newnode,*temp;
-  newnode=(struct node*)malloc(sizeof(struct node));
- printf("ENTER THE ELEMENT TO ENTER :");
- scanf("%d",&newnode->data);
- temp=head;
-  while(temp->next!=NULL)
-  {
-  temp=temp->next;
-  }
-  temp->next=newnode;
-  newnode->next=NULL;
-  return head;
-
- }
- void delatend(struct node*head)
- {
- struct node*temp,*prev;
- temp=head;
-  while(temp->next!=NULL)
-  {
-  prev=temp;
-  temp=temp->next;
-  }
-  prev->next=NULL;
-  free(temp);
-  }
- void delatbeg(struct node*head)
- {
- struct node*temp;
- temp=head;
- head=temp->next;
- free(temp);
- }
- void display(struct node *head)
- {
- struct node *ptr;
- ptr=head;
- while(ptr->next!=NULL){
- printf("%d ",ptr->data);
- ptr=ptr->next;
- }
- printf("%d ",ptr->data);
- }
+scanf(&quot;%d&quot;, &amp;data);
+head = deleteNode(head, data);
+break;
+case 3:
+printList(head);
+break;
+case 4:
+quit(head);
+exit(0);
+default:
+printf(&quot;Invalid choice, please try again.\n&quot;);
+}
+}
+return 0;
+getch();
+}
+Conclusion :
+In summary, the provided C code and algorithm offer a basic framework for creating and
+managing a singly linked list. It includes essential functions for inserting, deleting, printing, and
+quitting, all accessible through a user-friendly menu-driven interface. This code serves as a
+foundational example for understanding linked list operations in C, providing a starting point for
+more advanced applications and demonstrating the versatility of linked lists in data
+management.
